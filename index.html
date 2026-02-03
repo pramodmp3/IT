@@ -1,0 +1,1771 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>STACKLY | Engineering Digital Power</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-color: #050507;
+        --accent-primary: #00f2ff;
+        --accent-secondary: #7000ff;
+        --text-main: #ffffff;
+        --text-dim: rgba(255, 255, 255, 0.6);
+        --glass: rgba(255, 255, 255, 0.03);
+        --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+        --font-main:
+          "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+      }
+
+      :root {
+        --bg-dark: #050505;
+        --bg-glass: rgba(5, 5, 5, 0.85);
+        --accent: #00f2ff;
+        --text-primary: #ffffff;
+        --text-dim: rgba(255, 255, 255, 0.6);
+        --font-main:
+          "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        --nav-height: 80px;
+        --transition-speed: 0.4s;
+        --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+      }
+      .social-links {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      .social-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+      }
+
+      .social-icon:hover {
+        background: var(--accent);
+        color: var(--white);
+        border-color: var(--accent);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        font-family: var(--font-main);
+        color: var(--text-primary);
+        overflow-x: hidden;
+      }
+
+      body.menu-open {
+        overflow: hidden;
+      }
+      :root {
+        --bg-black: #050505;
+        --accent-cyan: #00f3ff;
+        --text-main: #e0e0e0;
+        --text-dim: #888888;
+        --border-dim: rgba(255, 255, 255, 0.08);
+        --cubic-ease: cubic-bezier(0.23, 1, 0.32, 1);
+        --font-sans: "Inter", sans-serif;
+        --font-mono: "JetBrains Mono", monospace;
+      }
+      /* --- CINEMATIC LOADER --- */
+      #loader {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition:
+          transform 1.2s var(--ease-out-expo),
+          opacity 1s ease;
+      }
+
+      .loader-content {
+        text-align: center;
+        perspective: 1000px;
+      }
+
+      .loader-logo {
+        font-size: 2.5rem;
+        font-weight: 900;
+        letter-spacing: 0.5rem;
+        text-transform: uppercase;
+        position: relative;
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+        animation: pulse-glow 2s infinite alternate;
+      }
+
+      .loader-logo::after {
+        content: "STACKLY";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0%;
+        height: 100%;
+        color: var(--text-main);
+        -webkit-text-stroke: 0px;
+        overflow: hidden;
+        border-right: 2px solid var(--accent-primary);
+        animation: fill-text 3s forwards var(--ease-out-expo);
+      }
+
+      @keyframes fill-text {
+        to {
+          width: 100%;
+        }
+      }
+
+      @keyframes pulse-glow {
+        from {
+          text-shadow: 0 0 10px rgba(0, 242, 255, 0);
+        }
+        to {
+          text-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
+        }
+      }
+      /* Header & Nav */
+      .stackly-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: var(--nav-height);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .stackly-nav {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo-link {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: 4px;
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: color var(--transition-speed);
+      }
+
+      /* Desktop Styles */
+      .nav-links-desktop {
+        display: none;
+        list-style: none;
+        gap: 3rem;
+      }
+
+      .nav-item {
+        text-decoration: none;
+        color: var(--text-dim);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 2px;
+        position: relative;
+        padding: 0.5rem 0;
+        transition: color var(--transition-speed);
+      }
+
+      .nav-item:hover {
+        color: var(--text-primary);
+      }
+
+      .nav-item::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 1px;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent);
+        transition: width var(--transition-speed) var(--ease-out);
+      }
+
+      .nav-item:hover::after {
+        width: 100%;
+      }
+
+      /* Hamburger UI */
+      .menu-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 10px;
+        z-index: 1001;
+      }
+
+      .hamburger-box {
+        width: 24px;
+        height: 18px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .line {
+        width: 100%;
+        height: 2px;
+        background-color: var(--text-primary);
+        transition:
+          transform 0.4s var(--ease-out),
+          opacity 0.3s ease;
+      }
+
+      .menu-toggle[aria-expanded="true"] .line-top {
+        transform: translateY(8px) rotate(45deg);
+      }
+
+      .menu-toggle[aria-expanded="true"] .line-mid {
+        opacity: 0;
+      }
+
+      .menu-toggle[aria-expanded="true"] .line-bot {
+        transform: translateY(-8px) rotate(-45deg);
+      }
+
+      /* Mobile Overlay */
+      .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        z-index: 999;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .mobile-overlay.active {
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      .overlay-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-dark);
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+      }
+
+      .mobile-overlay.active .overlay-bg {
+        transform: scaleY(1);
+      }
+
+      .overlay-content {
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        padding: 100px 10%;
+      }
+
+      .nav-links-mobile {
+        list-style: none;
+      }
+
+      .nav-links-mobile li {
+        overflow: hidden;
+        margin-bottom: 2rem;
+      }
+
+      .mobile-item {
+        display: block;
+        text-decoration: none;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        transform: translateY(100%);
+        transition: transform 0.8s var(--ease-out);
+        transition-delay: calc(var(--idx) * 0.1s);
+      }
+
+      .mobile-overlay.active .mobile-item {
+        transform: translateY(0);
+      }
+
+      .mobile-item:active {
+        color: var(--accent);
+      }
+
+      /* Responsive Breakpoints */
+      @media (min-width: 1024px) {
+        .nav-links-desktop {
+          display: flex;
+        }
+        .menu-toggle {
+          display: none;
+        }
+      }
+
+      /* --- HERO SECTION --- */
+      .hero {
+        height: 100vh;
+        width: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        overflow: hidden;
+      }
+
+      .hero-video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+        opacity: 0.35;
+        filter: grayscale(1) brightness(0.8);
+      }
+
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          circle at center,
+          transparent 0%,
+          var(--bg-color) 95%
+        );
+        z-index: 1;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        opacity: 0;
+        transform: translateY(30px);
+        max-width: 900px;
+      }
+
+      .hero-title {
+        font-size: clamp(3rem, 12vw, 8rem);
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        line-height: 0.85;
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        background: linear-gradient(to bottom, #fff, rgba(255, 255, 255, 0.4));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero-tagline {
+        font-size: 0.9rem;
+        color: var(--accent-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.6em;
+        margin-bottom: 2rem;
+        font-weight: 700;
+        display: block;
+      }
+
+      .hero-description {
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        color: var(--text-dim);
+        max-width: 650px;
+        margin: 0 auto 3.5rem auto;
+        line-height: 1.6;
+        font-weight: 300;
+      }
+
+      /* --- MAGNETIC CTA BUTTON --- */
+      .cta-wrap {
+        position: relative;
+        display: inline-block;
+      }
+
+      .btn-magnetic {
+        position: relative;
+        padding: 1.25rem 3.5rem;
+        background: transparent;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        overflow: hidden;
+        transition: all 0.4s var(--ease-out-expo);
+        outline: none;
+      }
+
+      .btn-magnetic:hover {
+        border-color: var(--accent-primary);
+        letter-spacing: 0.3em;
+        color: var(--accent-primary);
+        background: rgba(0, 242, 255, 0.05);
+      }
+
+      .btn-magnetic .btn-inner {
+        position: relative;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .btn-magnetic .flare {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(
+          circle,
+          var(--accent-primary) 0%,
+          transparent 70%
+        );
+        opacity: 0;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        mix-blend-mode: screen;
+        transition: opacity 0.3s ease;
+      }
+
+      /* --- SECTIONS --- */
+      section {
+        padding: 10rem 2.5rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        position: relative;
+      }
+
+      .section-label {
+        color: var(--accent-secondary);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+        display: block;
+      }
+
+      .section-title {
+        font-size: clamp(2.2rem, 6vw, 4rem);
+        margin-bottom: 5rem;
+        max-width: 900px;
+        line-height: 1.1;
+        font-weight: 800;
+      }
+
+      /* --- CLIENT TICKER --- */
+      .clients-ticker {
+        width: 100%;
+        overflow: hidden;
+        padding: 6rem 0;
+        background: rgba(255, 255, 255, 0.01);
+        border-top: 1px solid rgba(255, 255, 255, 0.03);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        margin: 2rem 0;
+      }
+
+      .ticker-track {
+        display: flex;
+        width: max-content;
+        animation: ticker 40s linear infinite;
+      }
+
+      .client-name {
+        font-size: clamp(1.5rem, 4vw, 3rem);
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 0 4.5rem;
+        color: transparent;
+        -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
+        transition: all 0.5s var(--ease-out-expo);
+        cursor: default;
+        white-space: nowrap;
+      }
+
+      /* Unique Brand Colors */
+      .c-1:hover {
+        -webkit-text-stroke: 1px #ff3e3e;
+        color: #ff3e3e;
+        text-shadow: 0 0 20px rgba(255, 62, 62, 0.4);
+        transform: scale(1.1);
+      }
+      .c-2:hover {
+        -webkit-text-stroke: 1px #00f2ff;
+        color: #00f2ff;
+        text-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+        transform: scale(1.1);
+      }
+      .c-3:hover {
+        -webkit-text-stroke: 1px #7000ff;
+        color: #7000ff;
+        text-shadow: 0 0 20px rgba(112, 0, 255, 0.4);
+        transform: scale(1.1);
+      }
+      .c-4:hover {
+        -webkit-text-stroke: 1px #ffcc00;
+        color: #ffcc00;
+        text-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+        transform: scale(1.1);
+      }
+      .c-5:hover {
+        -webkit-text-stroke: 1px #00ff66;
+        color: #00ff66;
+        text-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+        transform: scale(1.1);
+      }
+      .c-6:hover {
+        -webkit-text-stroke: 1px #ff00ff;
+        color: #ff00ff;
+        text-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+        transform: scale(1.1);
+      }
+
+      @keyframes ticker {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* --- VISION & MISSION --- */
+      .vision-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 4rem;
+        margin-top: 4rem;
+      }
+
+      .vision-item {
+        border-left: 2px solid var(--accent-primary);
+        padding-left: 2.5rem;
+      }
+
+      .vision-item h3 {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+        color: var(--accent-primary);
+        font-weight: 800;
+      }
+
+      .vision-item p {
+        font-size: 1.2rem;
+        color: var(--text-dim);
+        max-width: 600px;
+        line-height: 1.7;
+      }
+
+      /* --- SERVICES GRID --- */
+      .services-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .service-card {
+        background: var(--glass);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+        transition: all 0.6s var(--ease-out-expo);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .service-card:hover {
+        border-color: var(--accent-primary);
+        background: rgba(0, 242, 255, 0.03);
+        transform: translateY(-10px);
+      }
+
+      .service-card h3 {
+        font-size: 1.6rem;
+        letter-spacing: -0.01em;
+        font-weight: 700;
+      }
+
+      .service-card p {
+        color: var(--text-dim);
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+
+      /* --- TESTIMONIALS --- */
+      .testimonials-container {
+        height: 450px;
+        overflow: hidden;
+        position: relative;
+        mask-image: linear-gradient(
+          to bottom,
+          transparent,
+          black 15%,
+          black 85%,
+          transparent
+        );
+      }
+
+      .testimonials-track {
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        animation: scroll-vertical 25s linear infinite;
+      }
+
+      .testimonial-box {
+        background: var(--glass);
+        padding: 3rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: border-color 0.4s ease;
+      }
+
+      .testimonial-box:hover {
+        border-color: rgba(0, 242, 255, 0.2);
+      }
+
+      .testimonial-text {
+        font-style: italic;
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: #eee;
+        line-height: 1.6;
+      }
+
+      .testimonial-author {
+        color: var(--accent-primary);
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+      }
+
+      @keyframes scroll-vertical {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(-50%);
+        }
+      }
+
+      /* --- CONTACT FORM --- */
+      .contact-section {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6rem;
+      }
+
+      .contact-form {
+        display: grid;
+        gap: 2rem;
+      }
+
+      .form-group {
+        position: relative;
+      }
+
+      .form-input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 1.2rem 0;
+        color: #fff;
+        outline: none;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: border-color 0.4s ease;
+      }
+
+      .form-input:focus {
+        border-color: var(--accent-primary);
+      }
+
+      .form-label {
+        position: absolute;
+        top: 1.2rem;
+        left: 0;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--text-dim);
+        pointer-events: none;
+        transition: all 0.4s var(--ease-out-expo);
+      }
+
+      .form-input:focus + .form-label,
+      .form-input:not(:placeholder-shown) + .form-label {
+        top: -0.8rem;
+        font-size: 0.65rem;
+        color: var(--accent-primary);
+      }
+
+      /* --- NOISE TEXTURE --- */
+      .noise {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9998;
+        pointer-events: none;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+
+      /* --- SOUND TOGGLE --- */
+      .sound-toggle {
+        position: fixed;
+        bottom: 2.5rem;
+        right: 2.5rem;
+        z-index: 100;
+        background: var(--glass);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        cursor: pointer;
+        backdrop-filter: blur(12px);
+        transition: all 0.3s ease;
+      }
+
+      .sound-toggle:hover {
+        border-color: var(--accent-primary);
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      /* --- MEDIA QUERIES --- */
+      @media (min-width: 768px) {
+        .services-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .vision-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .contact-section {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      /* --- ANIMATION HELPERS --- */
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 1.2s var(--ease-out-expo);
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .stackly-footer {
+        position: relative;
+        background-color: var(--bg-black);
+        color: var(--text-main);
+        font-family: var(--font-sans);
+        padding: 80px 0 40px;
+        overflow: hidden;
+        border-top: 1px solid var(--border-dim);
+      }
+
+      /* Texture & Glow Effects */
+      .footer-noise {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3欲%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        opacity: 0.04;
+        pointer-events: none;
+      }
+
+      .footer-bg-glow {
+        position: absolute;
+        bottom: -10%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 40%;
+        background: radial-gradient(
+          circle,
+          rgba(0, 243, 255, 0.05) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .footer-container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 30px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Typography Helpers */
+      .block-title,
+      .nav-label {
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--accent-cyan);
+        margin-bottom: 25px;
+      }
+
+      /* Brand Block */
+      .logo-wrap {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 15px;
+      }
+
+      .logo-text {
+        font-weight: 800;
+        font-size: 2.2rem;
+        letter-spacing: -0.02em;
+        color: #fff;
+      }
+
+      .logo-glitch-line {
+        position: absolute;
+        bottom: 5px;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: var(--accent-cyan);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.8s var(--cubic-ease);
+      }
+
+      .reveal.active .logo-glitch-line {
+        transform: scaleX(1);
+      }
+
+      .brand-tagline {
+        font-size: 1.1rem;
+        font-weight: 300;
+        color: var(--text-main);
+      }
+
+      .manifesto-line {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--text-dim);
+        margin-top: 15px;
+        max-width: 300px;
+        line-height: 1.6;
+      }
+
+      /* Newsletter */
+      .newsletter-block {
+        margin-top: 50px;
+      }
+
+      .newsletter-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 400px;
+      }
+
+      .input-group {
+        position: relative;
+        width: 100%;
+      }
+
+      .newsletter-form input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border-dim);
+        padding: 16px 20px;
+        color: white;
+        font-family: var(--font-sans);
+        outline: none;
+        transition: all 0.4s var(--cubic-ease);
+      }
+
+      .input-focus-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 1px;
+        background: var(--accent-cyan);
+        transition: width 0.4s var(--cubic-ease);
+      }
+
+      .newsletter-form input:focus + .input-focus-line {
+        width: 100%;
+      }
+
+      .magnetic-btn {
+        background: #fff;
+        color: #000;
+        border: none;
+        padding: 16px 24px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .magnetic-btn:hover {
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+      }
+
+      .btn-icon {
+        width: 18px;
+        transition: transform 0.3s var(--cubic-ease);
+      }
+
+      .magnetic-btn:hover .btn-icon {
+        transform: translateX(4px);
+      }
+
+      /* Waveform Divider */
+      .divider-wrap {
+        margin: 60px 0;
+        opacity: 0.3;
+      }
+
+      .waveform {
+        width: 100%;
+        height: 40px;
+      }
+
+      /* Middle Grid */
+      .footer-mid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+
+      /* Nav Links */
+      .nav-links {
+        list-style: none;
+      }
+
+      .nav-links li {
+        margin-bottom: 12px;
+      }
+
+      .nav-item {
+        text-decoration: none;
+        color: var(--text-dim);
+        font-size: 1rem;
+        transition: color 0.3s ease;
+        display: inline-block;
+        position: relative;
+        padding: 4px 0;
+      }
+
+      .nav-item::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background: var(--accent-cyan);
+        transition: width 0.3s var(--cubic-ease);
+      }
+
+      .nav-item:hover {
+        color: #fff;
+      }
+
+      .nav-item:hover::after {
+        width: 100%;
+      }
+
+      /* Insight Cards */
+      .insight-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .insight-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--border-dim);
+        padding: 20px;
+        position: relative;
+        cursor: pointer;
+        transition: transform 0.3s var(--cubic-ease);
+      }
+
+      .insight-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(0, 243, 255, 0.3);
+      }
+
+      .card-meta {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        color: var(--text-dim);
+        margin-bottom: 8px;
+      }
+
+      .card-title {
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
+
+      /* Contact */
+      .contact-details {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .contact-item {
+        display: flex;
+        gap: 15px;
+        text-decoration: none;
+        color: var(--text-dim);
+        font-style: normal;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        align-items: flex-start;
+        transition: color 0.3s ease;
+      }
+
+      .contact-item:hover {
+        color: var(--accent-cyan);
+      }
+
+      .contact-icon {
+        width: 20px;
+        color: var(--accent-cyan);
+        flex-shrink: 0;
+      }
+
+      /* Bottom Row */
+      .footer-bottom {
+        margin-top: 80px;
+        padding-top: 40px;
+        border-top: 1px solid var(--border-dim);
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        align-items: center;
+        text-align: center;
+      }
+
+      .stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 40px;
+      }
+
+      .stat-item {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stat-num {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #fff;
+      }
+
+      .stat-label {
+        font-size: 0.7rem;
+        font-family: var(--font-mono);
+        color: var(--text-dim);
+        text-transform: uppercase;
+      }
+
+      .tag-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+      }
+
+      .tech-tag {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        border: 1px solid var(--border-dim);
+        padding: 6px 12px;
+        color: var(--text-dim);
+        letter-spacing: 0.1em;
+      }
+
+      .legal-line {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        color: #444;
+      }
+
+      /* Mobile Responsive Adjustments */
+      @media (min-width: 768px) {
+        .footer-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+        }
+
+        .newsletter-block {
+          margin-top: 0;
+        }
+
+        .footer-mid {
+          grid-template-columns: 1fr 1.5fr 1fr;
+        }
+
+        .footer-bottom {
+          flex-direction: row;
+          justify-content: space-between;
+          text-align: left;
+        }
+
+        .tag-cloud {
+          justify-content: flex-start;
+        }
+      }
+
+      /* Animations */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 1s var(--cubic-ease);
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body class="loading">
+    <div class="noise"></div>
+
+    <!-- LOADER -->
+    <div id="loader">
+      <div class="loader-content">
+        <div class="loader-logo">STACKLY</div>
+      </div>
+    </div>
+
+    <button class="sound-toggle" id="soundToggle">Audio: Off</button>
+    <header class="stackly-header">
+      <nav class="stackly-nav">
+        <div class="nav-brand">
+          <a href="#" class="logo-link">STACKLY</a>
+        </div>
+
+        <!-- Desktop Links -->
+        <ul class="nav-links-desktop">
+          <li><a href="./index.html" class="nav-item">HOME</a></li>
+          <li><a href="#" class="nav-item">SERVICES</a></li>
+          <li><a href="#" class="nav-item">ABOUT</a></li>
+          <li><a href="#" class="nav-item">CAREERS</a></li>
+          <li><a href="#" class="nav-item">CONTACT</a></li>
+        </ul>
+
+        <!-- Mobile Trigger -->
+        <button
+          class="menu-toggle"
+          aria-label="Toggle Menu"
+          aria-expanded="false"
+        >
+          <div class="hamburger-box">
+            <span class="line line-top"></span>
+            <span class="line line-mid"></span>
+            <span class="line line-bot"></span>
+          </div>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" aria-hidden="true">
+      <div class="overlay-bg"></div>
+      <div class="overlay-content">
+        <ul class="nav-links-mobile">
+          <li style="--idx: 0">
+            <a href="./index.html" class="mobile-item">HOME</a>
+          </li>
+          <li style="--idx: 1"><a href="#" class="mobile-item">SERVICES</a></li>
+          <li style="--idx: 2"><a href="#" class="mobile-item">ABOUT</a></li>
+          <li style="--idx: 3"><a href="#" class="mobile-item">CAREERS</a></li>
+          <li style="--idx: 4"><a href="#" class="mobile-item">CONTACT</a></li>
+        </ul>
+      </div>
+    </div>
+    <main id="smooth-scroll">
+      <!-- HERO -->
+      <section class="hero">
+        <video
+          class="hero-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          poster="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop"
+        >
+          <source
+            src="https://assets.mixkit.co/videos/preview/mixkit-abstract-technology-elements-in-blue-and-white-23348-large.mp4"
+            type="video/mp4"
+          />
+        </video>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content" id="heroContent">
+          <span class="hero-tagline">Architects of the Digital Frontier</span>
+          <h1 class="hero-title">Stackly</h1>
+          <p class="hero-description">
+            We bridge the gap between complex engineering and human-centric
+            design. From deep-learning AI to immersive web ecosystems, we build
+            the infrastructure for the next generation of global industry
+            leaders.
+          </p>
+          <div class="cta-wrap">
+            <button class="btn-magnetic" id="mainCTA">
+              <span class="btn-inner">Enter Experience</span>
+              <div class="flare"></div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLIENTS TICKER (Brand Spectrum) -->
+      <div class="clients-ticker">
+        <div class="ticker-track">
+          <span class="client-name c-1">NeuroLink</span>
+          <span class="client-name c-2">Apex Dynamics</span>
+          <span class="client-name c-3">Cyberdyne</span>
+          <span class="client-name c-4">Vanguard IT</span>
+          <span class="client-name c-5">Nebula Systems</span>
+          <span class="client-name c-6">Zenith Cloud</span>
+          <!-- Repeated for loop -->
+          <span class="client-name c-1">NeuroLink</span>
+          <span class="client-name c-2">Apex Dynamics</span>
+          <span class="client-name c-3">Cyberdyne</span>
+          <span class="client-name c-4">Vanguard IT</span>
+          <span class="client-name c-5">Nebula Systems</span>
+          <span class="client-name c-6">Zenith Cloud</span>
+        </div>
+      </div>
+
+      <!-- VISION & MISSION -->
+      <section id="vision">
+        <span class="section-label">Core Ethos</span>
+        <h2 class="section-title reveal">
+          Designed for Impact. Engineered for Longevity.
+        </h2>
+        <div class="vision-grid">
+          <div class="vision-item reveal">
+            <h3>The Vision</h3>
+            <p>
+              To redefine the boundary between human intent and machine
+              performance, creating a world where enterprise infrastructure is
+              invisible, intelligent, and infinitely scalable.
+            </p>
+          </div>
+          <div class="vision-item reveal" style="transition-delay: 0.2s">
+            <h3>The Mission</h3>
+            <p>
+              We empower forward-thinking brands by delivering surgical-grade
+              digital solutions—combining rapid iteration with uncompromising
+              quality to solve the hardest technical challenges.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICES -->
+      <section id="services">
+        <span class="section-label">Capabilities Matrix</span>
+        <h2 class="section-title reveal">
+          Full-Spectrum Engineering for a Non-Stop World.
+        </h2>
+        <div class="services-grid">
+          <div class="service-card reveal">
+            <h3>Web Systems</h3>
+            <p>
+              Enterprise-grade web platforms optimized for speed, security, and
+              global scale.
+            </p>
+          </div>
+          <div class="service-card reveal" style="transition-delay: 0.1s">
+            <h3>Mobile Tech</h3>
+            <p>
+              Fluid native applications that redefine user interaction on any
+              device.
+            </p>
+          </div>
+          <div class="service-card reveal" style="transition-delay: 0.2s">
+            <h3>QA & Security</h3>
+            <p>
+              Bulletproof automated testing and penetration protocols for total
+              reliability.
+            </p>
+          </div>
+          <div class="service-card reveal">
+            <h3>Product Design</h3>
+            <p>
+              Experience-driven UI/UX that captures brand identity through
+              cinematic motion.
+            </p>
+          </div>
+          <div class="service-card reveal" style="transition-delay: 0.1s">
+            <h3>Elite Staffing</h3>
+            <p>
+              Embedding top 1% engineering talent directly into your core
+              product teams.
+            </p>
+          </div>
+          <div class="service-card reveal" style="transition-delay: 0.2s">
+            <h3>Neural AI</h3>
+            <p>
+              Custom LLM integration and data intelligence layers to automate
+              complex workflows.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS -->
+      <section id="testimonials">
+        <span class="section-label">Operational Feedback</span>
+        <h2 class="section-title reveal">Validated by Industry Leaders.</h2>
+        <div class="testimonials-container reveal">
+          <div class="testimonials-track">
+            <div class="testimonial-box">
+              <p class="testimonial-text">
+                "Stackly didn't just build a platform; they built a competitive
+                advantage. Our deployment cycles dropped by 60% within the first
+                quarter."
+              </p>
+              <span class="testimonial-author">CTO, NeuroLink</span>
+            </div>
+            <div class="testimonial-box">
+              <p class="testimonial-text">
+                "The AI solutions provided by Stackly transformed our data silos
+                into predictive powerhouses. They are true architects."
+              </p>
+              <span class="testimonial-author"
+                >Head of Engineering, Apex Dynamics</span
+              >
+            </div>
+            <div class="testimonial-box">
+              <p class="testimonial-text">
+                "Their staffing solutions gave us senior engineers who
+                integrated seamlessly into our culture in days, not months."
+              </p>
+              <span class="testimonial-author">VP Tech, Zenith Cloud</span>
+            </div>
+            <!-- Repeated for loop -->
+            <div class="testimonial-box">
+              <p class="testimonial-text">
+                "Stackly didn't just build a platform; they built a competitive
+                advantage. Our deployment cycles dropped by 60% within the first
+                quarter."
+              </p>
+              <span class="testimonial-author">CTO, NeuroLink</span>
+            </div>
+            <div class="testimonial-box">
+              <p class="testimonial-text">
+                "The AI solutions provided by Stackly transformed our data silos
+                into predictive powerhouses. They are true architects."
+              </p>
+              <span class="testimonial-author"
+                >Head of Engineering, Apex Dynamics</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact">
+        <div class="contact-section">
+          <div>
+            <span class="section-label">Connection Node</span>
+            <h2 class="section-title reveal">Engineer <br />Your Future.</h2>
+            <p class="reveal" style="color: var(--text-dim); line-height: 1.8">
+              Bridge the gap between vision and reality. Submit your parameters
+              to initiate our engineering collaboration.
+            </p>
+          </div>
+          <form class="contact-form reveal">
+            <div class="form-group">
+              <input type="text" class="form-input" placeholder=" " required />
+              <label class="form-label">Identity / Name</label>
+            </div>
+            <div class="form-group">
+              <input type="email" class="form-input" placeholder=" " required />
+              <label class="form-label">Digital Address / Email</label>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-input" placeholder=" " required />
+              <label class="form-label">Objective / Project Scope</label>
+            </div>
+            <div class="cta-wrap" style="margin-top: 1rem">
+              <button type="submit" class="btn-magnetic" style="width: 100%">
+                <span class="btn-inner">Initiate Transmission</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer class="stackly-footer" id="stacklyFooter">
+      <div class="footer-noise"></div>
+      <div class="footer-bg-glow"></div>
+
+      <div class="footer-container">
+        <!-- Top Section: Brand & Newsletter -->
+        <div class="footer-top">
+          <div class="brand-block reveal">
+            <div class="logo-wrap">
+              <span class="logo-text">STACKLY</span>
+              <div class="logo-glitch-line"></div>
+            </div>
+            <p class="brand-tagline">Engineering Digital Power</p>
+            <div class="manifesto-line">
+              Built with precision for the era of autonomous intelligence.
+            </div>
+            <div class="social-links">
+              <a href="#" class="social-icon" aria-label="LinkedIn">In</a>
+              <a href="#" class="social-icon" aria-label="Twitter">X</a>
+              <a href="#" class="social-icon" aria-label="Facebook">Fb</a>
+            </div>
+          </div>
+
+          <div class="newsletter-block reveal">
+            <h4 class="block-title">Intelligence Briefing</h4>
+            <form class="newsletter-form" id="newsletterForm">
+              <div class="input-group">
+                <input
+                  type="email"
+                  placeholder="Enter your work email"
+                  required
+                  aria-label="Work Email"
+                />
+                <div class="input-focus-line"></div>
+              </div>
+              <button type="submit" class="magnetic-btn">
+                <span class="btn-text">SUBSCRIBE</span>
+                <svg
+                  class="btn-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    d="M5 12h14M12 5l7 7-7 7"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Divider Waveform -->
+        <div class="divider-wrap reveal">
+          <svg
+            class="waveform"
+            viewBox="0 0 1200 40"
+            preserveAspectRatio="none"
+          >
+            <path
+              class="wave-path"
+              d="M0,20 Q150,5 300,20 T600,20 T900,20 T1200,20"
+              fill="none"
+              stroke="rgba(0, 243, 255, 0.2)"
+              stroke-width="1"
+            />
+          </svg>
+        </div>
+
+        <!-- Middle Section: Links & Insights -->
+        <div class="footer-mid">
+          <div class="nav-grid reveal">
+            <div class="nav-column">
+              <h5 class="nav-label">Navigation</h5>
+              <ul class="nav-links">
+                <li>
+                  <a href="./index.html" class="nav-item"><span>Home</span></a>
+                </li>
+                <li>
+                  <a href="#" class="nav-item"><span>Services</span></a>
+                </li>
+                <li>
+                  <a href="#" class="nav-item"><span>Solutions</span></a>
+                </li>
+                <li>
+                  <a href="#" class="nav-item"><span>Careers</span></a>
+                </li>
+                <li>
+                  <a href="#" class="nav-item"><span>About Stackly</span></a>
+                </li>
+                <li>
+                  <a href="#" class="nav-item"><span>Contact</span></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="insights-grid reveal">
+            <h5 class="nav-label">Latest Insights</h5>
+            <div class="insight-cards">
+              <div class="insight-card">
+                <span class="card-meta">01 / JAN 2024</span>
+                <h6 class="card-title">Quantum-Safe Cloud Architecture</h6>
+                <div class="card-hover-bg"></div>
+              </div>
+              <div class="insight-card">
+                <span class="card-meta">02 / DEC 2023</span>
+                <h6 class="card-title">AI-Driven DevOps Pipelines</h6>
+                <div class="card-hover-bg"></div>
+              </div>
+              <div class="insight-card">
+                <span class="card-meta">03 / NOV 2023</span>
+                <h6 class="card-title">Global Infrastructure Milestone</h6>
+                <div class="card-hover-bg"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-block reveal">
+            <h5 class="nav-label">Connect</h5>
+            <div class="contact-details">
+              <div class="contact-item">
+                <svg class="contact-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  />
+                  <circle
+                    cx="12"
+                    cy="10"
+                    r="3"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  />
+                </svg>
+                <address>
+                  101 Cyber Plaza, Silicon District,<br />San Francisco, CA
+                  94105
+                </address>
+              </div>
+              <a href="mailto:hello@stackly.ai" class="contact-item">
+                <svg class="contact-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  />
+                </svg>
+                <span>hello@stackly.ai</span>
+              </a>
+              <a href="tel:+1800STACKLY" class="contact-item">
+                <svg class="contact-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  />
+                </svg>
+                <span>+1 800 STACKLY</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Section: Stats & Tags -->
+        <div class="footer-bottom reveal">
+          <div class="stats-row">
+            <div class="stat-item">
+              <span class="stat-num">12+</span>
+              <span class="stat-label">Years of Precision</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">450+</span>
+              <span class="stat-label">Secure Deployments</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">24/7</span>
+              <span class="stat-label">Global Availability</span>
+            </div>
+          </div>
+
+          <div class="tag-cloud">
+            <span class="tech-tag">AI CORE</span>
+            <span class="tech-tag">CLOUD NATIVE</span>
+            <span class="tech-tag">CYBER SEC</span>
+            <span class="tech-tag">KUBERNETES</span>
+          </div>
+
+          <div class="legal-line">
+            &copy; 2024 STACKLY INC. ALL SYSTEMS OPERATIONAL.
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="./navbar.js"></script>
+    <script src="./foot.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const loader = document.getElementById("loader");
+        const heroContent = document.getElementById("heroContent");
+
+        window.addEventListener("load", () => {
+          setTimeout(() => {
+            loader.style.opacity = "0";
+            loader.style.transform = "scale(1.1)";
+            document.body.classList.remove("loading");
+            setTimeout(() => {
+              loader.style.display = "none";
+              heroContent.style.transition = "all 1.5s var(--ease-out-expo)";
+              heroContent.style.opacity = "1";
+              heroContent.style.transform = "translateY(0)";
+            }, 1000);
+          }, 2000);
+        });
+
+        // Magnetic Interaction
+        const magneticBtns = document.querySelectorAll(".btn-magnetic");
+        magneticBtns.forEach((btn) => {
+          const flare = btn.querySelector(".flare");
+          btn.addEventListener("mousemove", (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            // Button movement
+            btn.style.transform = `translate(${(x - centerX) / 5}px, ${(y - centerY) / 5}px)`;
+
+            if (flare) {
+              flare.style.opacity = "1";
+              flare.style.left = `${x}px`;
+              flare.style.top = `${y}px`;
+            }
+          });
+          btn.addEventListener("mouseleave", () => {
+            btn.style.transform = `translate(0px, 0px)`;
+            if (flare) flare.style.opacity = "0";
+          });
+        });
+
+        // Reveal on Scroll
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("active");
+              }
+            });
+          },
+          { threshold: 0.1 },
+        );
+
+        document
+          .querySelectorAll(".reveal")
+          .forEach((el) => observer.observe(el));
+
+        // Ambient Audio System
+        const soundBtn = document.getElementById("soundToggle");
+        let audioCtx,
+          oscillator,
+          isPlaying = false;
+
+        soundBtn.addEventListener("click", () => {
+          if (!isPlaying) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            oscillator = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            oscillator.frequency.setValueAtTime(45, audioCtx.currentTime); // Deep hum
+            gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+            oscillator.connect(gain);
+            gain.connect(audioCtx.destination);
+            oscillator.start();
+            isPlaying = true;
+            soundBtn.textContent = "Audio: On";
+          } else {
+            oscillator.stop();
+            isPlaying = false;
+            soundBtn.textContent = "Audio: Off";
+          }
+        });
+
+        // Parallax Video
+        window.addEventListener("scroll", () => {
+          const video = document.querySelector(".hero-video");
+          if (video) {
+            const scroll = window.pageYOffset;
+            video.style.transform = `translate(-50%, calc(-50% + ${scroll * 0.4}px)) scale(${1 + scroll * 0.0005})`;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
